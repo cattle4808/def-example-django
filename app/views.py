@@ -8,6 +8,10 @@ from rest_framework import  generics
 from datetime import datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
+from .service import get_students_registrate_month, get_sponsors_registrate_month,get_sponsors_collected_amount, get_students_contract_amount, get_remaining_contract_amount
+
+
+from .service import MonthStatsService
 
 
 class StudentListCreateAPIView(generics.ListCreateAPIView):
@@ -259,5 +263,59 @@ class SponsorStudentListCreateAPIView(generics.ListCreateAPIView):
 
 
 
+###########################################################################
+#######             |               ||                          ############
+######              |===============||                           ###########
+#####               | /            \ |                            ##########
+######              ||              ||                           ###########
+#######             ||              ||                          ############
+############################################################################
 
 
+"""
+class GetMonthStatsView(APIView):
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        data_student = get_students_registrate_month()
+        data_sponsor = get_sponsors_registrate_month()
+        get_sponsors_collected_amount()
+
+        response_data = {
+            "students": [{
+                "month": student.get("month"),
+                "total": student.get("total"),
+            } for student in data_student],
+
+            "sponsors": [{
+                "month": sponsor.get("month"),
+                "total": sponsor.get("total")
+            } for sponsor in data_sponsor]
+        }
+        return Response(response_data)
+"""
+
+
+class GetAmountStatsView(APIView):
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        sponsors_collected_amount = get_sponsors_collected_amount()
+        students_contract_amount = get_students_contract_amount()
+        remaining_contract_amount = get_remaining_contract_amount()
+
+        response_data = {
+            "sponsors_collected_amount": sponsors_collected_amount,
+            "students_contract_amount": students_contract_amount,
+            "remaining_contract_amount": remaining_contract_amount
+        }
+
+        return Response(response_data)
+
+class GetMonthStatsView(APIView):
+    serializer_class = None
+
+    def get(self, request):
+        return Response(
+            MonthStatsService().get_sponsor_student_stats()
+        )

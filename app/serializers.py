@@ -19,9 +19,9 @@ class StudentSerializerPOST(serializers.ModelSerializer):
         model = Student
         fields = '__all__'
         # fields = ('id', 'full_name', 'degree', 'university', 'telephone', 'contract_amount', 'date')
-        extra_kwargs = {
-            'date': {'read_only': True}
-        }
+        #extra_kwargs = {
+        #    'date': {'read_only': True}
+        #}
 
 
 class StudentSerializerGET(serializers.ModelSerializer):
@@ -57,9 +57,9 @@ class SponsorSerializerGET(serializers.ModelSerializer):
 
     class Meta:
         model = Sponsor
-        exclude = ('payment_method', 'date')
+        exclude = ('payment_method',)
         extra_kwargs = {
-            'date': {'read_only': True},
+            #'date': {'read_only': True},
             'status': {'read_only': True}
         }
 
@@ -79,9 +79,9 @@ class SponsorSerializerGET(serializers.ModelSerializer):
 class SponsorSerializerPOST(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        exclude = ('payment_method', 'date')
+        exclude = ('payment_method',)
         extra_kwargs = {
-            'date': {'read_only': True},
+            #'date': {'read_only': True},
             'status': {'read_only': True}
         }
 

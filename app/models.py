@@ -1,5 +1,8 @@
 from django.db import models
 from .validators.telephone import validate_phone_number
+from django.utils.timezone import now
+
+
 
 class University(models.Model):
     name = models.CharField(
@@ -40,7 +43,7 @@ class Student(models.Model):
         verbose_name="Kontrakt summasi"
     )
     date = models.DateField(
-        auto_now_add=True,
+        default=now().date(),
         verbose_name="Sana"
 
     )
@@ -113,7 +116,7 @@ class Sponsor(models.Model):
         null=True
     )
     date = models.DateField(
-        auto_now_add=True,
+        default=now().date(),
         verbose_name="Sana"
     )
 
@@ -139,7 +142,7 @@ class SponsorStudent(models.Model):
         default=0
     )
     date = models.DateField(
-        auto_now_add=True,
+        default=now().date(),
         verbose_name="Sana"
     )
 

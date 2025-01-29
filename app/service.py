@@ -1,5 +1,6 @@
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from .models import Student, Sponsor, SponsorStudent
+from django.db.models.functions import ExtractMonth, ExtractYear
 
 class StudentAggregator:
     def __init__(self, student_id):
@@ -91,6 +92,80 @@ class StudentSponsorAggregator:
 
 
 
+
 # annotate, TruncMonth
+def get_students_registrate_month():
+    return Student.objects.annotate(month=TruncMonth("date")).values("month").annotate(total=Count("id")).order_by("month")
 
 
+def get_sponsors_registrate_month():
+    return Sponsor.objects.annotate(month=TruncMonth("date")).values("month").annotate(total=Count("id")).order_by("month")
+
+
+def get_sponsors_collected_amount():
+    return Sponsor.objects.values().aggregate(total_collected_amount=Sum("collected_amount"))["total_collected_amount"] or 0
+
+def get_students_contract_amount():
+    return Student.objects.values().aggregate(total_contract_amount=Sum("contract_amount"))["total_contract_amount"] or 0
+
+def get_remaining_contract_amount():
+    collected_amount = Sponsor.objects.values().aggregate(total_collected_amount=Sum("collected_amount"))["total_collected_amount"] or 0
+    contract_amount = Student.objects.values().aggregate(total_contract_amount=Sum("contract_amount"))["total_contract_amount"] or 0
+
+    total = contract_amount - collected_amount
+    return total if total > 0 else 0
+
+
+
+class MonthStatsService:
+    MODELS = {
+        "sponsors_total": Sponsor,
+        "students_total": Student
+    }
+
+    # def get_students_registrate_month(self):
+    #     response = (Student.objects
+    #             .annotate(
+    #                 month=ExtractMonth("date"),
+    #                 year=ExtractYear("date"))
+    #             .values("year", "month")
+    #             .annotate(total=Count("id"))
+    #             .order_by("year", "month")
+    #             )
+    #     print(response)
+    #     return response
+    #
+    #
+    # def get_sponsors_registrate_month(self):
+    #     response = (Sponsor.objects.values().annotate(
+    #                 year=ExtractYear("date"),
+    #                 month = ExtractMonth("date"))
+    #             .values("year", "month")
+    #             .annotate(total=Count("id"))
+    #             .order_by("year", "month")
+    #         )
+    #     print(response)
+    #     return response
+
+    def get_sponsor_student_stats(self):
+        stats = {}
+
+        for key, model in self.MODELS.items():
+            queryset = (model.objects.annotate(
+                    year=ExtractYear("date"),
+                    month=ExtractMonth("date"))
+                .values("year", "month")
+                .annotate(total=Count("id"))
+                .order_by("year", "month"))
+
+            for item in queryset:
+                year, month, total = item["year"], item["month"], item["total"]
+                if year not in stats:
+                    stats[year] = {}
+
+                if month not in stats[year]:
+                    stats[year][month] = {}
+
+                stats[year][month][key] = total
+        print(stats)
+        return stats
