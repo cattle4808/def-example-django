@@ -1,0 +1,12 @@
+# /etc/systemd/system/gunicorn-def.socket    
+
+# Description=your description
+[Unit]
+Description=shit project 
+
+[Socket]
+ListenStream=/run/gunicorn-def.sock
+
+[Install]
+WantedBy=sockets.target
+
