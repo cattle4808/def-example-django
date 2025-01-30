@@ -2,7 +2,7 @@
 ___
 ## Docker
 ```bash
-git pull origin last-main --rebase
+docker-compose up --build    
 ```
 
 
