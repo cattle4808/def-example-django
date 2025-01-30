@@ -1,4 +1,10 @@
 # def-example-django
+___
+## Docker
+```bash
+git pull origin last-main --rebase
+```
+
 
 ___  
 ## Commands  
