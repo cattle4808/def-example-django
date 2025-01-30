@@ -1,6 +1,6 @@
 asgiref
 attrs
-Django
+django
 django-filter
 djangorestframework
 drf-spectacular
@@ -15,5 +15,7 @@ referencing
 rpds-py
 sqlparse
 typing_extensions
-
-
+psycopg2-binary
+python-environ
+django-cors-headers
+gunicorn
