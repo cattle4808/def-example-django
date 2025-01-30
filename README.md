@@ -1,7 +1,10 @@
 # def-example-django
 
-##commnads
+___
+## commnads
+
 ### Reload systemd after making changes
 ```
 sudo systemctl daemon-reload  
 ```
+___
