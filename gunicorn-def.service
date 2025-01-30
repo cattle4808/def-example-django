@@ -7,6 +7,15 @@ After=network.target
 [Service]
 User=root
 Group=root
+
+#WorkingDirectory=/root/example-django
+#ExecStart=/root/example-django/.venv/bin/gunicorn \
+#        --access-logfile - \  
+#        --workers 3 \         
+#        --bind unix:/run/example-gunicorn.sock \ 
+#        example_project.wsgi:application
+
+
 WorkingDirectory=/root/def-example-django
 ExecStart=/root/def-example-django/.venv/bin/gunicorn \
         --access-logfile - \
